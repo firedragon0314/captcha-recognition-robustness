@@ -1,0 +1,14 @@
+================================================================================
+Run all experiments started at: 2026-05-16T22:29:14.121362
+Command: python src/run_all_experiments.py
+Total experiments: 1
+--------------------------------------------------------------------------------
+Starting experiment 1/1: crnn_rotation5_cpu_h128_b8
+Started at: 2026-05-16T22:29:14.122074
+Completed: crnn_rotation5_cpu_h128_b8
+Experiment dir: experiments/train_001_crnn_rotation5_cpu_h128_b8
+Finished at: 2026-05-17T20:10:04.053206
+================================================================================
+Run all experiments finished at: 2026-05-17T20:10:04.053371
+Completed: 1
+Failed: 0

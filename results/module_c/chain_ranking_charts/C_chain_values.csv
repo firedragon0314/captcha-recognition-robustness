@@ -1,0 +1,6 @@
+module,chain,seq_acc,percent,best_detail
+C,original -> C,0.96433333,96.43%,none | train_014 | pure_resnet_multihead | semisupervised
+C,original -> M6-M8 -> C,0.96293333,96.29%,M6 | train_014 | pure_resnet_multihead | semisupervised
+C,dirty -> M1-M4 -> C,0.74040000,74.04%,M1 | train_011 | stn_multihead | consistency
+C,dirty -> C,0.03673333,3.67%,none | train_011 | stn_multihead | consistency
+C,clean -> C,0.00213333,0.21%,none | train_015 | pure_resnet_multihead | consistency

@@ -1,0 +1,70 @@
+{
+    "epochs": 200,
+    "batch_size": 64,
+    "lr": 1e-06,
+    "seed": 3027,
+    "num_workers": 0,
+    "train_rotation": 5.0,
+    "device": "cuda",
+    "exp_name": "train_009_stn_multihead_contrastive_seed3027_ratio70_stn",
+    "exp_tag": "",
+    "model_variant": "stn_multihead",
+    "train_mode": "contrastive",
+    "use_stn": true,
+    "labeled_ratio": 0.7,
+    "pseudo_label_threshold": 0.95,
+    "contrastive_weight": 1.0,
+    "consistency_weight": 1.0,
+    "warmup_epochs": 20,
+    "stn_freeze_epochs": 15,
+    "stn_lr_scale": 0.1,
+    "stn_identity_weight": 0.001,
+    "saved_at": "2026-05-20T19:26:59.830542",
+    "history_rows": 200,
+    "best_scores": {
+        "val_seq_acc": 0.9614,
+        "val_char_acc": 0.9921733333333334,
+        "val_edit_distance": 0.03913333333333333,
+        "test_seq_acc": 0.9635333333333334,
+        "test_char_acc": 0.9925066666666666,
+        "test_edit_distance": 0.037333333333333336
+    },
+    "dataset_stats": {
+        "full_train_samples": 70000,
+        "labeled_train_samples": 49000,
+        "unlabeled_train_samples": 21000,
+        "val_samples": 15000,
+        "test_samples": 15000
+    },
+    "split_metadata": {
+        "labeled_preview": [
+            "0_L1CHL.png",
+            "10000_IYSUA.png",
+            "10001_I75PW.png",
+            "10002_SSW0T.png",
+            "10005_W5KLT.png"
+        ],
+        "unlabeled_preview": [
+            "10003_E4O40.png",
+            "10004_OYWF3.png",
+            "10008_R897Y.png",
+            "10011_UD5P5.png",
+            "10015_O6E05.png"
+        ]
+    },
+    "stage_info": {
+        "stage_start_epoch": 174,
+        "stage_end_epoch": 200,
+        "learning_rate": 1e-06,
+        "trigger_reason": "preset_stage_schedule_50_100_150_200"
+    },
+    "robustness_metrics": {
+        "clean_accuracy": "available_on_clean_val_test_sets",
+        "robustness_drop": "not_available_from_current_dataset",
+        "restoration_gain": "not_available_from_current_dataset"
+    },
+    "lr_schedule_reference": {
+        "preset": "50->100->150->200",
+        "trigger_reason": "preset_stage_schedule_50_100_150_200"
+    }
+}

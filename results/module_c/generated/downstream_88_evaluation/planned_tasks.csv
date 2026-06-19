@@ -1,0 +1,89 @@
+﻿group,group_label,source_dataset,input_condition,denoiser_id,denoiser_target_dataset,recognition_model
+dirty,dirty->model,dirty,dirty,,,train_008
+dirty,dirty->model,dirty,dirty,,,train_009
+dirty,dirty->model,dirty,dirty,,,train_010
+dirty,dirty->model,dirty,dirty,,,train_011
+dirty,dirty->model,dirty,dirty,,,train_012
+dirty,dirty->model,dirty,dirty,,,train_013
+dirty,dirty->model,dirty,dirty,,,train_014
+dirty,dirty->model,dirty,dirty,,,train_015
+normal,normal->model,normal,normal,,,train_008
+normal,normal->model,normal,normal,,,train_009
+normal,normal->model,normal,normal,,,train_010
+normal,normal->model,normal,normal,,,train_011
+normal,normal->model,normal,normal,,,train_012
+normal,normal->model,normal,normal,,,train_013
+normal,normal->model,normal,normal,,,train_014
+normal,normal->model,normal,normal,,,train_015
+clean,clean->model,clean,clean,,,train_008
+clean,clean->model,clean,clean,,,train_009
+clean,clean->model,clean,clean,,,train_010
+clean,clean->model,clean,clean,,,train_011
+clean,clean->model,clean,clean,,,train_012
+clean,clean->model,clean,clean,,,train_013
+clean,clean->model,clean,clean,,,train_014
+clean,clean->model,clean,clean,,,train_015
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_008
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_009
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_010
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_011
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_012
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_013
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_014
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M1_denoised,M1,normal,train_015
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_008
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_009
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_010
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_011
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_012
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_013
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_014
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M2_denoised,M2,normal,train_015
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_008
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_009
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_010
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_011
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_012
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_013
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_014
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M3_denoised,M3,normal,train_015
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_008
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_009
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_010
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_011
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_012
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_013
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_014
+dirty_denoised,dirty->M1-M4 denoised->model,dirty,dirty_M4_denoised,M4,normal,train_015
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_008
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_009
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_010
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_011
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_012
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_013
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_014
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M5_denoised,M5,clean,train_015
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_008
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_009
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_010
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_011
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_012
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_013
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_014
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M6_denoised,M6,clean,train_015
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_008
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_009
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_010
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_011
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_012
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_013
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_014
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M7_denoised,M7,clean,train_015
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_008
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_009
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_010
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_011
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_012
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_013
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_014
+normal_denoised,normal->M5-M8 denoised->model,normal,normal_M8_denoised,M8,clean,train_015

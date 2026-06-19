@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+.venv/
+venv/
+env/
+
+.DS_Store
+Thumbs.db
+
+train/
+val/
+test/
+data/raw/
+datasets/
+
+*.zip
+*.7z
+*.rar
+
+cache/
+tmp/
+temp/
+
+# Runtime logs are artifacts. Keep path manifests in docs/, but do not track
+# raw log files by default.
+*.log

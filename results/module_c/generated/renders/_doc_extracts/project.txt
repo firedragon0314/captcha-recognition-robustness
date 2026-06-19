@@ -1,0 +1,251 @@
+Programming for Deep Learning (CO3027) Final Project Proposal
+Robust CAPTCHA Recognition under Corrupted Conditions: Sequence-based Recognition vs Position-wise Character Classification
+Course: Programming for Deep Learning (CO3027) | Team: 吳睿嬛 / 葉俊廷 / 盛正璿
+1. Topic
+Robust CAPTCHA Recognition under Corrupted Conditions: Sequence-based Recognition vs Position-wise Character Classification
+2. Brief Introduction of This Project
+Text-based CAPTCHA is a common human verification method used to distinguish human users from automated programs. CAPTCHA images usually contain visual distortions such as noise, blur, interference lines, rotation, overlapping characters, and complex backgrounds. These distortions make CAPTCHA recognition a challenging computer vision and sequence-learning problem.
+In this project, we study text-based CAPTCHA recognition in a controlled experimental environment. Our goal is not to attack or bypass real-world systems, but to compare different deep learning recognition strategies under corrupted CAPTCHA conditions.
+Instead of building only one recognition model, this project compares two fundamentally different CAPTCHA recognition approaches.
+1. Sequence-based recognition
+2. Position-wise character classification
+The project also studies whether image restoration preprocessing can improve recognition robustness under noisy and distorted conditions.
+Research Question: This project investigates whether image restoration preprocessing improves CAPTCHA recognition robustness under corrupted conditions, and compares two recognition strategies: CRNN-based sequence recognition and CNN-based position-wise character classification.
+The project is organized around three sub-questions:
+- RQ1: Does image restoration improve recognition accuracy under corrupted CAPTCHA conditions<->
+- RQ2: Which recognition strategy is more robust: CRNN sequence recognition or CNN multi-head character classification<->
+- RQ3: Does contrastive CNN feature learning improve robustness under corrupted CAPTCHA conditions<->
+The project is divided into three main modules:
+- CAPTCHA corruption generation and image restoration
+- Sequence-based CAPTCHA recognition
+- Robust character-level CAPTCHA classification
+吳睿嬛 focuses on CAPTCHA corruption generation and image restoration using Denoising Autoencoder and DnCNN. 葉俊廷 focuses on sequence-based CAPTCHA recognition using CRNN with CTC Loss together with contrastive CNN feature learning. 盛正璿 focuses on robust character classification using a CNN multi-head classifier with contrastive CNN feature learning.
+The purpose of this project is to compare how different recognition strategies behave under clean, corrupted, and restored CAPTCHA conditions.
+The main contribution of this project is a controlled robustness comparison between sequence-based CAPTCHA recognition and position-wise character classification, with systematic evaluation of whether image restoration improves recognition under corrupted CAPTCHA conditions.
+3. Related Work
+3.1 Denoising Autoencoder
+Pascal Vincent, Hugo Larochelle, Yoshua Bengio, and Pierre-Antoine Manzagol, "Extracting and Composing Robust Features with Denoising Autoencoders," ICML 2008, is the classical reference for Denoising Autoencoder methods. This paper is relevant because our restoration module also learns to reconstruct clean CAPTCHA images from corrupted inputs.
+3.2 DnCNN
+Kai Zhang, Wangmeng Zuo, Yunjin Chen, Deyu Meng, and Lei Zhang, "Beyond a Gaussian Denoiser: Residual Learning of Deep CNN for Image Denoising," IEEE Transactions on Image Processing, 2017, is a standard residual denoising baseline. We cite it because our project compares autoencoder-based restoration with residual CNN-based denoising before CAPTCHA recognition.
+3.3 CRNN + CTC
+Baoguang Shi, Xiang Bai, and Cong Yao, "An End-to-End Trainable Neural Network for Image-Based Sequence Recognition and Its Application to Scene Text Recognition," IEEE TPAMI 2016, is the main CRNN reference used in this proposal. It is relevant because our sequence-recognition branch also follows the CNN-RNN-CTC idea for unsegmented text prediction.
+3.4 SimCLR
+Ting Chen, Simon Kornblith, Mohammad Norouzi, and Geoffrey Hinton, "A Simple Framework for Contrastive Learning of Visual Representations," ICML 2020, provides the SimCLR framework. We use this reference because contrastive learning is part of the CNN feature-learning design in our recognition models.
+3.5 MoCo
+Kaiming He, Haoqi Fan, Yuxin Wu, Saining Xie, and Ross Girshick, "Momentum Contrast for Unsupervised Visual Representation Learning," CVPR 2020, provides the MoCo framework. It is cited for the same reason as SimCLR: to support robust contrastive CNN feature learning under multiple corrupted CAPTCHA conditions.
+4. Dataset Specification
+The CAPTCHA dataset used in this project will be generated using a custom Python CAPTCHA generation script based on the `captcha` Python package (`captcha.image.ImageCaptcha`). Each image contains a fixed-length sequence of 5 characters composed of uppercase English letters (A-Z) and digits (0-9).
+The CAPTCHA images are generated using the following settings:
+- Image size: 160 x 60
+- CAPTCHA length: 5 characters
+- Character set: uppercase letters and digits
+- Random seed: 3027
+The dataset generation pipeline is implemented in Python.
+A total of 100,000 clean CAPTCHA images will be generated.
+Dataset split: 70% training set, 15% validation set, and 15% testing set.
+The data preparation process is divided into three stages:
+- Stage 1: Generate clean CAPTCHA images using captcha.image.ImageCaptcha.
+- Stage 2: Apply additional corruption functions to create corrupted validation and test conditions such as Gaussian noise, blur, rotation, interference lines, background clutter, and partial occlusion.
+- Stage 3: Use the restoration models to generate restored CAPTCHA images from the corrupted images.
+Therefore, the original Python generation script is responsible for creating the clean CAPTCHA dataset only. Corrupted sets and restored sets are created in later processing stages rather than directly produced by the base generation script.
+The clean CAPTCHA images are stored using the following naming format:
+The synthetic CAPTCHA generation approach provides several advantages for this project.
+- Large-scale data generation
+- Automatically generated labels
+- Controlled corruption settings
+- Flexible robustness evaluation
+Both 葉俊廷 and 盛正璿 will use the same clean set, corrupted conditions, and restored outputs to ensure fair comparison between sequence-based recognition and position-wise character classification.
+5. Team Project Plan / Methodology / Coding Architecture
+The project is divided into three main modules.
+5.1 Module 1 - CAPTCHA Corruption Generation and Image Restoration
+This module will be mainly handled by 吳睿嬛.
+The purpose of this module is:
+1. Generate corrupted CAPTCHA images
+2. Restore corrupted CAPTCHA images before recognition
+This module serves as the image-processing foundation for the whole project.
+吳睿嬛 will implement two image restoration models: Denoising Autoencoder and DnCNN. The restored CAPTCHA images will later be used by both recognition models developed by 葉俊廷 and 盛正璿.
+Method 1 - Denoising Autoencoder
+A Denoising Autoencoder will be used as the baseline image restoration model.
+The model learns to reconstruct clean CAPTCHA images from corrupted CAPTCHA images.
+Training pairs are automatically generated as follows.
+Corruption types include:
+- Noise
+- Blur
+- Rotation
+- Interference lines
+- Partial occlusion
+The restoration pipeline is:
+The model will be trained using:
+- Mean Squared Error (MSE)
+- Binary Cross Entropy (BCE)
+Evaluation metrics include reconstruction loss, PSNR, and SSIM.
+Method 2 - DnCNN-based Denoising
+吳睿嬛 will also implement a DnCNN-based denoising model.
+DnCNN uses residual learning to estimate the noise component in the corrupted CAPTCHA image.
+Compared with a standard autoencoder, DnCNN may preserve character edges more effectively.
+Different corruption types will be tested:
+- Gaussian noise
+- Motion blur
+- Gaussian blur
+- Interference lines
+- Background clutter
+- Rotation
+The denoising performance will be evaluated using PSNR, SSIM, and reconstruction loss.
+5.2 Module 2 - Sequence-based CAPTCHA Recognition
+This module will be mainly handled by 葉俊廷.
+The purpose of this module is:
+1. Recognize the entire CAPTCHA sequence directly without manual character segmentation
+葉俊廷 focuses on sequence-based CAPTCHA recognition using a CRNN model with contrastive CNN feature learning.
+This approach is suitable for CAPTCHA recognition because CAPTCHA characters may overlap or contain interference patterns.
+The recognition pipeline is:
+For this branch, the CNN feature extractor can also be initialized by contrastive CNN feature learning under corrupted augmentations before CRNN training.
+葉俊廷 mainly studies:
+- Sequence recognition accuracy
+- Sequence robustness under corruption
+- Recognition performance under restored CAPTCHA conditions
+The CRNN model will be evaluated using clean, corrupted, and restored CAPTCHA images.
+5.3 Module 3 - Position-wise Robust Character Classification
+This module will be mainly handled by 盛正璿.
+The purpose of this module is:
+1. Predict each character position with a CNN-based multi-head classifier
+Unlike 葉俊廷, which focuses on sequence-based recognition, 盛正璿 focuses on position-wise character classification.
+This design is suitable for fixed-length CAPTCHA recognition and aims to improve robustness under noisy and distorted conditions.
+The classification pipeline is:
+Contrastive CNN Feature Learning
+Contrastive CNN feature learning will be used to learn stable CAPTCHA feature representations.
+Different augmented versions of the same CAPTCHA image should have similar feature representations, while different CAPTCHA images should remain distant in feature space.
+盛正璿 first trains the CNN encoder using contrastive CNN feature learning, where different corrupted versions of the same CAPTCHA image are treated as positive pairs. After pretraining, the encoder is connected to five classification heads, and the full model is fine-tuned for position-wise character prediction.
+Different augmentations include:
+- Noise
+- Blur
+- Rotation
+- Brightness changes
+- Interference lines
+Robustness Evaluation
+盛正璿 mainly studies:
+- Character-level robustness
+- Feature stability under corruption
+- Generalization ability under distortion
+The model will be evaluated under clean, noisy, blurred, distorted, and restored CAPTCHA conditions.
+The CNN classifier developed by 盛正璿 is independent from the CRNN sequence model developed by 葉俊廷, and both models will later be compared.
+6. Evaluation Metrics
+The evaluation metrics are organized into three groups so that we can separately analyze restoration quality, recognition accuracy, and robustness under corruption.
+6.1 Restoration Metrics
+6.2 Recognition Metrics
+6.3 Robustness Metrics
+The main comparison settings are:
+- Clean, corrupted, and restored CAPTCHA images
+- CRNN-based sequence recognition and CNN multi-head classification
+A possible result table is shown below.
+7. Work Assignment and Five-Week Schedule
+7.1 Work Assignment
+7.2 Five-Week Schedule
+Week 1 - Proposal Discussion and Project Planning
+All Members: Discuss project scope, finalize the research question, and determine responsibilities.
+吳睿嬛: Study CAPTCHA corruption generation and image restoration methods.
+葉俊廷: Review CRNN, CTC-based sequence recognition, and Contrastive CNN feature learning.
+盛正璿: Review multi-head CNN classification and Contrastive CNN methods.
+Expected output:
+- Finalized proposal
+- Defined project structure
+- Dataset generation plan
+- Division of responsibilities
+Week 2 - Dataset Generation and Baseline Setup
+吳睿嬛: Generate clean and corrupted CAPTCHA datasets using the CAPTCHA generation script.
+葉俊廷: Build the CRNN baseline model and prepare the sequence-recognition pipeline with Contrastive CNN feature initialization.
+盛正璿: Build the CNN multi-head classifier baseline and prepare augmentation pipelines.
+Expected output:
+- CAPTCHA dataset
+- Corrupted CAPTCHA dataset
+- Initial CRNN baseline
+- Initial CNN classifier baseline
+Week 3 - Main Model Implementation
+吳睿嬛: Implement Denoising Autoencoder and DnCNN restoration models.
+葉俊廷: Train CRNN sequence-recognition models under clean and corrupted conditions and test Contrastive CNN feature initialization.
+盛正璿: Implement Contrastive CNN pretraining and train the robust CNN classifier.
+Expected output:
+- Restored CAPTCHA images
+- Sequence-recognition results
+- CNN classification results
+- Initial robustness comparison
+Week 4 - Robustness Evaluation and Comparison
+吳睿嬛: Analyze restoration quality using PSNR and SSIM.
+葉俊廷: Evaluate CRNN robustness under noisy, blurred, and restored conditions.
+盛正璿: Evaluate CNN classifier robustness under corrupted conditions and compare with CRNN.
+Expected output:
+- Robustness evaluation results
+- Restoration-quality analysis
+- Comparison tables and figures
+Week 5 - Final Integration and Report
+All Members: Integrate experimental results and prepare the final report and presentation.
+吳睿嬛: Prepare image restoration visualizations and analysis.
+葉俊廷: Prepare sequence-recognition comparison results.
+盛正璿: Prepare robustness-analysis discussion and final comparison figures.
+Expected output:
+- Final report
+- Final presentation slides
+- Experimental figures
+- Source code
+- Final comparison tables
+8. Final Deliverables
+By the end of this project, we expect to complete:
+- A clean CAPTCHA dataset generator together with corrupted and restored evaluation sets
+- Denoising Autoencoder and DnCNN restoration models
+- A CRNN-based sequence-recognition model and a CNN multi-head classification model
+- Evaluation tables for clean, corrupted, and restored test conditions
+- Restoration Gain and Robustness Drop analysis
+- A final report and presentation slides
+[[TABLE]]
+Example label: A7K9P
+[[TABLE]]
+from captcha.image import ImageCaptcha
+[[TABLE]]
+index_text.png 1023_A7K9P.png
+[[TABLE]]
+Clean CAPTCHA image -> add corruption Corrupted CAPTCHA image
+[[TABLE]]
+Corrupted CAPTCHA image -> Encoder -> Latent representation -> Decoder -> Restored CAPTCHA image
+[[TABLE]]
+Corrupted CAPTCHA image -> DnCNN -> Predicted noise residual -> Restored CAPTCHA image
+[[TABLE]]
+CAPTCHA image -> CNN feature extractor -> RNN / LSTM / GRU -> CTC Loss -> Predicted CAPTCHA text
+Example input label: A7K9P
+[[TABLE]]
+CAPTCHA image -> CNN feature extractor -> Multi-head character classifiers -> Predicted characters
+Example output for a 5-character CAPTCHA: Head 1 -> A Head 2 -> 7 Head 3 -> K Head 4 -> 9 Head 5 -> P
+[[TABLE]]
+Metric | Description
+Reconstruction Loss | Measure restoration training loss
+PSNR | Measure pixel-level restoration quality
+SSIM | Measure structural similarity
+Visual Comparison | Show clean, corrupted, and restored examples
+[[TABLE]]
+Metric | Description
+Character Accuracy | Whether each predicted character is correct
+Sequence Accuracy | Whether the whole CAPTCHA string is exactly correct
+Edit Distance | Difference between the predicted string and the ground-truth string
+Per-position Accuracy | Accuracy of the 1st to 5th character positions, especially for the multi-head CNN
+[[TABLE]]
+Metric | Description
+Clean Accuracy | Accuracy on the clean test set
+Noise Accuracy | Accuracy on noisy CAPTCHA images
+Blur Accuracy | Accuracy on blurred CAPTCHA images
+Rotation Accuracy | Accuracy on rotated CAPTCHA images
+Interference-line Accuracy | Accuracy on line-corrupted CAPTCHA images
+Restored Accuracy | Accuracy after corrupted images are restored
+Robustness Drop | Clean Accuracy - Corrupted Accuracy
+Restoration Gain | Restored Accuracy - Corrupted Accuracy
+[[TABLE]]
+Method | Train | Test | Char. | Seq. | Edit Dist. | Rob. Drop | Rest. Gain
+CRNN | Clean | Clean |  |  |  | - | -
+CRNN | Clean | Noisy |  |  |  |  | -
+CRNN | Clean | Restored Noisy |  |  |  |  | 
+MH-CNN | Clean | Clean |  |  |  | - | -
+MH-CNN | Clean | Noisy |  |  |  |  | -
+MH-CNN | Clean | Restored Noisy |  |  |  |  | 
+Contrastive CNN | Augmented | Noisy |  |  |  |  | 
+[[TABLE]]
+Member | Main Responsibility | AI / ML / DL Method
+吳睿嬛 | CAPTCHA corruption generation and image restoration | Denoising Autoencoder, DnCNN
+葉俊廷 | Sequence-based CAPTCHA recognition | CRNN, CTC Loss, Contrastive CNN
+盛正璿 | Robust character classification and robustness learning | CNN Multi-head Classifier, Contrastive CNN

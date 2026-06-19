@@ -1,0 +1,28 @@
+# Module C commands
+
+# 1) Launch all 8 Module C models sequentially
+# This runs one model all the way to 200 epochs, then starts the next one.
+# Change --num_workers here when you want to control the worker count for all 8 jobs.
+& "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\launch_module_c_all.py" --num_workers 4
+
+# 2) Preview all 8 sequential launch commands without starting training
+& "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\launch_module_c_all.py" --num_workers 4 --dry_run
+
+# 3) Optional: launch all 8 in parallel background windows
+& "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\launch_module_c_all.py" --num_workers 4 --background_parallel
+
+# 4) Print the 8 background cmd commands directly
+& "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\generate_module_c_commands.py"
+
+# 5) Start one staged experiment manually: pure_multihead + supervised
+cmd /c start /belownormal "" "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\run_experiment.py" --epochs 50 --batch_size 128 --lr 0.001 --num_workers 4 --seed 3027 --train_rotation 5.0 --model_variant pure_multihead --train_mode supervised --labeled_ratio 0.7 --pseudo_label_threshold 0.95 --contrastive_weight 1.0 --consistency_weight 1.0 --warmup_epochs 20 --exp_tag pure_multihead_supervised_seed3027_ratio70_nostn --next_stage 100:0.0001 --next_stage 150:0.00001 --next_stage 200:0.000001
+
+# 6) Start one staged experiment manually: stn_multihead + consistency
+cmd /c start /belownormal "" "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\run_experiment.py" --epochs 50 --batch_size 128 --lr 0.001 --num_workers 4 --seed 3027 --train_rotation 5.0 --model_variant stn_multihead --train_mode consistency --labeled_ratio 0.7 --pseudo_label_threshold 0.95 --contrastive_weight 1.0 --consistency_weight 1.0 --warmup_epochs 20 --exp_tag stn_multihead_consistency_seed3027_ratio70_stn --next_stage 100:0.0001 --next_stage 150:0.00001 --next_stage 200:0.000001
+
+# 7) Resume an existing staged experiment from a later phase
+cmd /c start /belownormal "" "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\run_experiment.py" --epochs 150 --batch_size 128 --lr 0.00001 --resume_exp train_001_pure_multihead_supervised_seed3027_ratio70_nostn --num_workers 4 --seed 3027 --train_rotation 5.0 --model_variant pure_multihead --train_mode supervised --labeled_ratio 0.7 --pseudo_label_threshold 0.95 --contrastive_weight 1.0 --consistency_weight 1.0 --warmup_epochs 20 --next_stage 200:0.000001
+
+# 8) Compare experiments
+& "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\compare_runs.py" --from train_001 --upto train_020
+& "C:\Users\buckl\anaconda3\envs\env_py_3_12\python.exe" "C:\Users\buckl\.spyder-py3\智慧學習\captchas\compare_runs.py" --experiments train_003 train_007 train_020

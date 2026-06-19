@@ -1,0 +1,6 @@
+module,chain,seq_acc,percent,best_detail
+B,original -> B,0.98450000,98.45%,none | B2_04_selfsup_transformer
+B,original -> M6-M8 -> B,0.98250000,98.25%,M6 | B2_02_contrastive_transformer
+B,dirty -> M1-M4 -> B,0.76460000,76.46%,M1 | B1_04_selfsup_crnn
+B,dirty -> B,0.00730000,0.73%,none | B1_04_selfsup_crnn
+B,clean -> B,0.00550000,0.55%,none | B1_02_contrastive_crnn

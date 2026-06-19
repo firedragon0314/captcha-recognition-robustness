@@ -1,0 +1,12 @@
+﻿stage_start_epoch,stage_end_epoch,learning_rate,trigger_reason
+1,50,0.001,preset_stage_schedule_50_100_150_200
+37,50,0.001,preset_stage_schedule_50_100_150_200
+51,100,0.0001,preset_stage_schedule_50_100_150_200
+71,50,0.001,preset_stage_schedule_50_100_150_200
+71,100,0.0001,preset_stage_schedule_50_100_150_200
+101,150,1e-05,preset_stage_schedule_50_100_150_200
+127,150,1e-05,preset_stage_schedule_50_100_150_200
+134,150,1e-05,preset_stage_schedule_50_100_150_200
+151,200,1e-06,preset_stage_schedule_50_100_150_200
+174,150,1e-05,preset_stage_schedule_50_100_150_200
+174,200,1e-06,preset_stage_schedule_50_100_150_200

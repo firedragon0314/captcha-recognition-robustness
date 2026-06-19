@@ -1,0 +1,276 @@
+C：Position-wise Multi-head CNN
+C 模組的目標是：
+將 CAPTCHA 視為固定長度字串，並對每個位置獨立分類。也就是不把整張 CAPTCHA 當成一串 sequence 讀，而是讓模型分別預測第 1、2、3、4、5 個字元。
+C-1 Pure Multi-head CNN
+模型概念
+Pure Multi-head CNN 使用：
+shared CNN encoder + multiple classification heads
+也就是前面共用同一個 CNN feature extractor，後面接上 5 個不同的 classification head。
+每個 head 負責預測 CAPTCHA 中固定位置的字元。
+模型流程
+image → CNN feature extractor → shared feature representation → 5 classification heads → predicted characters
+例如輸入圖片的 ground truth 是：
+A7K9P
+模型會輸出：
+Head 1 → A Head 2 → 7 Head 3 → K Head 4 → 9 Head 5 → P
+CNN Feature Extractor
+CNN feature extractor 負責從 CAPTCHA image 中提取 visual feature。
+它會學習：
+字元邊緣
+字元形狀
+筆畫方向
+前景與背景差異
+干擾線與真正字元的差別
+這些 feature 會被所有 classification heads 共用。
+Shared Feature Representation
+shared feature representation 是 CNN encoder 產生的共同特徵。
+它的作用是：
+提供每個 head 判斷字元的基礎資訊
+減少模型參數量
+讓模型共同學習整張 CAPTCHA 的視覺結構
+Head Definition
+Classification Space
+每個 head 都做：
+36-class classification
+分類類別包含：
+A-Z，共 26 類
+0-9，共 10 類
+所以每個 head 都會輸出 36 個 class probability。
+為什麼叫 Multi-head？
+因為模型最後不是只有一個輸出，而是有多個輸出 head。
+每個 head 專門負責一個字元位置。
+因此這個模型適合固定長度 CAPTCHA，例如本研究中的 5-character CAPTCHA。
+C-1 的優點
+結構簡單
+訓練穩定
+inference speed 快
+每個位置可以單獨分析 accuracy
+適合 fixed-length CAPTCHA
+C-1 的缺點
+無法處理 variable-length CAPTCHA
+對 overlapping characters 較敏感
+需要字元位置相對固定
+如果字元嚴重旋轉或位移，特定 head 可能容易預測錯誤
+C-1 的訓練方式
+1. 監督式學習（Supervised Learning）
+概念
+使用完整 CAPTCHA label 進行訓練。
+例如 ground truth 是：
+A7K9P
+會拆成：
+y1 = A y2 = 7 y3 = K y4 = 9 y5 = P
+每個 head 都對應一個 target label。
+Loss Function
+每個 head 使用 Cross Entropy Loss。
+總 loss 為五個 head 的 loss 加總：
+Total Loss = CrossEntropy(head1) + CrossEntropy(head2) + CrossEntropy(head3) + CrossEntropy(head4) + CrossEntropy(head5)
+目的
+讓模型學會：
+第 1 個位置應該預測哪個字元
+第 2 個位置應該預測哪個字元
+第 3 個位置應該預測哪個字元
+第 4 個位置應該預測哪個字元
+第 5 個位置應該預測哪個字元
+2. 非監督式學習（Unsupervised Learning）
+Contrastive Learning
+先不使用 label。
+讓 CNN encoder 學習 robust feature representation。
+Positive Pair
+同一張 CAPTCHA 的不同 augmentation：
+A7K9P clean ↔ A7K9P noisy
+模型應讓兩者的 feature representation 接近。
+Negative Pair
+不同 CAPTCHA：
+A7K9P ↔ Q2M8X
+模型應讓兩者的 feature representation 保持距離。
+目的
+讓 CNN encoder 學會：
+真正重要的是字元本身的 visual structure。
+而不是：
+noise
+blur
+background pattern
+interference lines
+3. 半監督式學習（Semi-supervised Learning）
+概念
+使用：
+部分 labeled CAPTCHA 30%
+大量 unlabeled CAPTCHA 70%
+方法
+有 label 的資料：
+image + position-wise label
+使用五個 heads 的 Cross Entropy Loss。
+沒有 label 的資料：
+使用 pseudo-label。
+也就是先用目前模型預測 unlabeled image，產生：
+pseudo y1, pseudo y2, pseudo y3, pseudo y4, pseudo y5
+再把 high-confidence pseudo-label 當作訓練資料。
+目的
+降低對 labeled data 的依賴，並測試在少量 label 情況下，Multi-head CNN 是否仍能維持辨識能力。
+4. 自監督學習（Self-supervised Learning）
+Augmentation Consistency Learning
+對同一張 CAPTCHA 做不同 augmentation，例如：
+noise
+blur
+rotation
+brightness change
+模型需學習：
+不同 augmentation 下的 feature representation 應保持穩定。
+Self-supervised Learning Pipeline
+image → augmentation A → CNN encoder → feature A image → augmentation B → CNN encoder → feature B contrastive loss(feature A, feature B)
+Self-supervised Learning Objective
+模型需學習：
+augmentation invariance
+feature stability
+corruption robustness
+position-wise feature consistency
+為什麼 C 需要自監督學習？
+因為 Multi-head CNN 依賴固定位置的 feature。
+如果 CAPTCHA 出現：
+rotation
+blur
+noise
+interference lines
+某些 head 可能會受到特定位置干擾。
+自監督學習可以讓 shared CNN encoder 學到更穩定的 feature，降低 corruption 對每個 head 的影響。
+C-2 Attention + multi-head CNN Module
+attention mechanism 讓模型自動學習：
+圖片中哪些區域比較重要。
+對 CAPTCHA 來說，重要區域通常是：
+字元筆畫
+字元邊緣
+字元所在區域
+不重要區域可能是：
+background clutter
+random noise
+interference lines
+C-2 的訓練方式
+1. 監督式學習（Supervised Learning）
+使用完整 CAPTCHA label。
+例如：
+A7K9P
+拆成：
+y1 = A y2 = 7 y3 = K y4 = 9 y5 = P
+每個 head 使用 Cross Entropy Loss。
+總 loss：
+Total Loss = CrossEntropy(head1) + CrossEntropy(head2) + CrossEntropy(head3) + CrossEntropy(head4) + CrossEntropy(head5)
+2. 非監督式學習（Unsupervised Learning）
+Contrastive Learning
+先不使用 label 訓練 ResNet-based encoder。
+讓 encoder 學習：
+robust feature representation。
+Positive Pair
+A7K9P clean ↔ A7K9P rotated
+Negative Pair
+A7K9P ↔ Q2M8X
+目的
+讓模型學到：
+同一張 CAPTCHA 即使經過不同 corruption，feature 仍然要接近。
+不同 CAPTCHA 的 feature 則要分開。
+3. 半監督式學習（Semi-supervised Learning）
+使用：
+部分 labeled CAPTCHA 30%
+大量 unlabeled CAPTCHA 70%
+有 label 的資料：
+使用 position-wise Cross Entropy Loss。
+沒有 label 的資料：
+使用 pseudo-label。
+若模型對某張 unlabeled CAPTCHA 的五個 head 都有高 confidence，則將其加入訓練。
+4. 自監督學習（Self-supervised Learning）
+Position-wise Augmentation Consistency Learning
+對同一張 CAPTCHA 產生兩種 augmentation：
+augmentation A: noisy image augmentation B: blurred image
+模型需學習：
+兩者的 shared feature representation 應接近。
+也可以進一步要求：
+每個 head 的 feature 或 prediction distribution 保持一致。
+Self-supervised Learning Pipeline
+image → augmentation A → ResNet encoder + attention → feature A image → augmentation B → ResNet encoder + attention → feature B contrastive loss(feature A, feature B)
+目的
+提升：
+feature stability
+position-wise robustness
+augmentation invariance
+corrupted CAPTCHA recognition performance
+C 的比較設計
+C 的 Evaluation Metrics
+C 的 Per-position Accuracy
+因為 C 是 position-wise model，所以特別需要分析每個位置的 accuracy。
+例如：
+這可以觀察：
+哪個位置最容易錯
+干擾是否集中在某些位置
+multi-head 是否真的適合 fixed-length CAPTCHA
+C 的 Failure Analysis
+C 模組需要記錄錯誤預測案例。
+每筆 failure case 包含：
+C 的 Artifact / Output Tracking
+每次 C 的 experiment 都必須保存完整成果，不可覆蓋。
+experiments/train_XXX/ checkpoints/ epoch_001.pth epoch_002.pth latest.pth best_val_seq_acc.pth best_val_char_acc.pth best_val_edit_distance.pth best_test_seq_acc.pth best_test_char_acc.pth best_test_edit_distance.pth metrics/ epoch_001.json epoch_002.json plots/ loss.svg loss.png seq_acc.svg seq_acc.png char_acc.svg char_acc.png edit_distance.svg edit_distance.png position_1_acc.svg position_1_acc.png position_2_acc.svg position_2_acc.png position_3_acc.svg position_3_acc.png position_4_acc.svg position_4_acc.png position_5_acc.svg position_5_acc.png failures/ val_failures.csv test_failures.csv failure_samples/ history.csv config.json metadata.json command.txt requirements.txt
+C 的 Learning Rate Strategy
+C 模組使用四檔 learning rate：
+Learning Rate Decay
+可使用兩種策略：
+1. Fixed Interval Decay
+每隔 50 個 epoch 降低 learning rate。
+適合訓練曲線穩定下降的情況。
+2. Loss Plateau Decay
+當 validation loss 開始震盪或不再下降時，降低 learning rate。
+適合模型接近收斂但仍有震盪的情況。
+Learning Rate Decision Requirement
+每次 learning rate 調整都必須記錄：
+[[TABLE]]
+Head | Responsibility
+Head 1 | 預測第 1 個字元
+Head 2 | 預測第 2 個字元
+Head 3 | 預測第 3 個字元
+Head 4 | 預測第 4 個字元
+Head 5 | 預測第 5 個字元
+[[TABLE]]
+Model | Train Data | Test Data
+Pure Multi-head CNN | Clean | Clean
+Pure Multi-head CNN | Clean | Corrupted
+Pure Multi-head CNN | Restored | Corrupted
+Pure Multi-head CNN | Restored | Restored
+Better Multi-head CNN | Clean | Clean
+Better Multi-head CNN | Clean | Corrupted
+Better Multi-head CNN | Restored | Corrupted
+Better Multi-head CNN | Restored | Restored
+[[TABLE]]
+Metric | Description
+Per-position Accuracy | 每個字元位置 accuracy
+Character Accuracy | 所有字元的平均 accuracy
+Sequence Accuracy | 整串 CAPTCHA 是否完全正確
+Edit Distance | 預測字串與 ground truth 的距離
+Robustness Drop | corruption 後 accuracy 下降量
+Restoration Gain | restoration 後 accuracy 提升量
+[[TABLE]]
+Position | Accuracy
+Position 1 | 第 1 個字元 accuracy
+Position 2 | 第 2 個字元 accuracy
+Position 3 | 第 3 個字元 accuracy
+Position 4 | 第 4 個字元 accuracy
+Position 5 | 第 5 個字元 accuracy
+[[TABLE]]
+Item | Description
+image path | 圖片路徑
+ground truth | 正確 CAPTCHA
+prediction | 模型預測
+wrong position | 哪個位置錯
+corruption type | corruption 類型
+corruption level | corruption 強度
+confidence | 模型信心分數
+[[TABLE]]
+Learning Rate
+0.001
+0.0001
+0.00001
+0.000001
+[[TABLE]]
+Item | Description
+epoch | 第幾個 epoch
+old_lr | 原本 learning rate
+new_lr | 新 learning rate
+reason | 調整原因
+metrics | 當時 validation metrics
+timestamp | 調整時間
